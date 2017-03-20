@@ -1,0 +1,5 @@
+0	MutationalAnalysis
+1	IHC
+2	FISH
+3	OTHER
+4	NONE
