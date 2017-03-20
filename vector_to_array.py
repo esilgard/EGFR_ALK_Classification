@@ -21,11 +21,10 @@ def vector_to_array(sparse_array, feature_d, batch_set, input_vector_file):
                             out.write(' '+feature_d[l[f]])
                     out.write('\n')
 
-def main(test_name, algorithm, train_batch):
+def main(test_name, algorithm, train_batch, input_vector_file):
     '''
     get appropriate instances for classification depending on the algorithm
     '''
-    input_vector_file = test_name + '_feature_vectors.txt'
     
     if algorithm == 'reported':
         batch_set = set([y.split('\t')[0] for y in \
