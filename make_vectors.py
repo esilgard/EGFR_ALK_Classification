@@ -28,7 +28,7 @@ TEST_NAME = 'EGFR'
 
 # one output file per batch, per test type
 OUTPUT_FILE = 'Input' + os.sep + TEST_NAME + '_feature_vectors.txt'
-RESOURCE_DIR = 'H:/EGFR_ALK/Test/Resources/'
+RESOURCE_DIR = 'Resources/'
 STOP_LIST = '[\s\^](TO|THE|FOR|A|AN|AS|THIS|THAT|THESE|THEY|IN|OF|ON|OR|BY)( THE|A|AN)?[\s\$]'
 
 # windows dictate the number of tokens on either side of the test name
