@@ -10,13 +10,13 @@ None of the SVM models needed for end to end classification are included in this
 reported: this is a combination of a keyword filter and an SVM that classifies all reports in the input as either "Reported" or "NotReported" for each test
     (for the purposes of sensitivity/specificity metrics and for consumption by downstream algorithms, "Reported" is considered a positive classification and "NotReported" a negative)
 
-reported: this is an SVM that classifies all reports classified as "NotReported" by the previous reported algorithm as either "Insufficient" or "Unknown" for each test
+insufficient: this is an SVM that classifies all reports classified as "NotReported" by the previous reported algorithm as either "Insufficient" or "Unknown" for each test
     (for the purposes of sensitivity/specificity metrics and for consumption by downstream algorithms, "Insufficient" is considered a positive classification and "Unknown" a negative)
 
 positive: this is an SVM that classifies all reports classified as "Reported" by the previous reported algorithm as either "Positive" or "Negative" for each test
     (for the purposes of sensitivity/specificity metrics and for consumption by downstream algorithms, "Positive" is considered a positive classification and "Negative" a negative)
 
-positive: this is an SVM that classifies all reports classified as "Reported" by the previous reported algorithm as either the standard testing methodology or "OTHER" for each test
+method: this is an SVM that classifies all reports classified as "Reported" by the previous reported algorithm as either the standard testing methodology or "OTHER" for each test
     (for the purposes of sensitivity/specificity metrics and for consumption by downstream algorithms, the standard testing methodology ("MutationalAnalysis" for EGFR and "FISH" for ALK) is considered a positive classification and "OTHER" a negative)
     
 
