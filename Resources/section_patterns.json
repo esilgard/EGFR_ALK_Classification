@@ -1,0 +1,53 @@
+{
+	"<newline>_SECTION_ ADDENDUM<newline>": [
+		"(.{,30}Addendum.{,30})"
+	],
+	"<newline>_SECTION_ CLINICAL<newline>": [
+		"(.{,30}Clinical( Data)?.{,30})",
+		"(.{,30}Clinical( H(x)?(istory)?)?.{,30})"
+	],
+	"<newline>_SECTION_ COMMENT<newline>": [
+		"(.{,30}Comment.{,30})",
+		"(.{,30}Note.{,30})"
+	],
+	"<newline>_SECTION_ DIAGNOSIS<newline>": [
+		"(.{,30}Final D(x)?(iagnosis)?.{,30})",
+		"(.{,30}Impression.{,30})",
+		"(.{,30}Diagnosis.{,30})"
+	],
+	"<newline>_SECTION_ FISH<newline>": [
+		"(.{,30}(CF).{,3}ISH.{,30})",
+		"(.{,30}[Ff]luorescen.{,30})",
+		"(.{,30}FLUORESCEN.{,30})"
+	],
+	"<newline>_SECTION_ FLOW_CYTOMETRY<newline>": [
+		"(.{,30}Flow Cyto.{,30})",
+		"(.{,30}FLOW CYTO.{,30})"
+	],
+	"<newline>_SECTION_ GROSS<newline>": [
+		"(.{,30}Gross.{,30})",
+		"(.{,30}[dD]escription.{,30})",
+		"(.{,30}[mM]aterials.{,30})"
+	],
+	"<newline>_SECTION_ IHC<newline>": [
+		"(.{,30}IHC.{,30})",
+		"(.{,30}[iI]mmuno[cyhis]{2,4}tochemi.{,30})",
+		"(.{,30}ICC.{,30})"
+	],
+	"<newline>_SECTION_ MUTATIONAL<newline>": [
+		"(.{,30}OPX.{,30})",
+		"(.{,30}Oncoplex.{,30})",
+		"(.{,30}[Mm]utational.{,30})"
+	],
+	"<newline>_SECTION_ OPERTIVE<newline>": [
+		"(.{,30}operative.{,30})",
+		"(.{,30}Consult.{,30})"
+	],
+	"<newline>_SECTION_ SUMMARY<newline>": [
+		"(.{,30}Summary.{,30})"
+	],
+	"<newline>_SECTION_ TESTS<newline>": [
+		"(.{,30}Tests.{,30})",
+		"(.{,30}Studies.{,30})"
+	]
+}
