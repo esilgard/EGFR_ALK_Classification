@@ -16,7 +16,7 @@ import os, re, json
 # the pathology report accession number 
 # and the raw text of the pathology report
 # assumed to be a tab delimited file
-INSTANCES_FILE = 'H:/EGFR_ALK/Test/tester_file.txt'
+INSTANCES_FILE = 'Input/tester_file.txt'
 # identifiey columns for report id, accession, and report text (initial column = 0)
 TEXT_COL = 9
 REPORT_ID_COL = 3
@@ -24,10 +24,10 @@ ACC_NUM_COL = 7
 
 # the test/marker to be classified - note this needs to be the standardized
 # key that is present in the "condensed_patterns.json" resource file
-TEST_NAME = 'ALK'
+TEST_NAME = 'EGFR'
 
 # one output file per batch, per test type
-OUTPUT_FILE = 'H:/EGFR_ALK/Test/' + TEST_NAME + '_feature_vectors.txt'
+OUTPUT_FILE = 'Input' + os.sep + TEST_NAME + '_feature_vectors.txt'
 RESOURCE_DIR = 'H:/EGFR_ALK/Test/Resources/'
 STOP_LIST = '[\s\^](TO|THE|FOR|A|AN|AS|THIS|THAT|THESE|THEY|IN|OF|ON|OR|BY)( THE|A|AN)?[\s\$]'
 
