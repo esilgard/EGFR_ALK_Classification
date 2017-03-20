@@ -1,24 +1,27 @@
 # EGFR_ALK_Classification
 ===========================
-a hybrid model to classify EGFR and ALK test use, results, and methods from free text pathology reports 
+
+A hybrid model to classify EGFR and ALK test use, results, and methods from free text pathology reports 
 
 ### This system classifies EGFR and ALK molecular tests from the free text of pathology reports.
-None of the SVM models needed for end to end classification are included in this repository
+_None of the SVM models needed for end to end classification are included in this repository_
 
+Dependencies = python 2.7.13; scipy and sklearn 0.18.1
 
-*There are four principal algorithms*
+#### There are four principal algorithms
 -------------------------------------
+each needs its own folder to house svm models and feature sets as well as the output classification of negative and positive instances
 
-* reported: this is a combination of a keyword filter and an SVM that classifies all reports in the input as either "Reported" or "NotReported" for each test
+* __reported__: this is a combination of a keyword filter and an SVM that classifies all reports in the input as either "Reported" or "NotReported" for each test
     (for the purposes of sensitivity/specificity metrics and for consumption by downstream algorithms, "Reported" is considered a positive classification and "NotReported" a negative)
 
-* insufficient: this is an SVM that classifies all reports classified as "NotReported" by the previous reported algorithm as either "Insufficient" or "Unknown" for each test
+* __insufficient__: this is an SVM that classifies all reports classified as "NotReported" by the previous reported algorithm as either "Insufficient" or "Unknown" for each test
     (for the purposes of sensitivity/specificity metrics and for consumption by downstream algorithms, "Insufficient" is considered a positive classification and "Unknown" a negative)
 
-* positive: this is an SVM that classifies all reports classified as "Reported" by the previous reported algorithm as either "Positive" or "Negative" for each test
+* __positive__: this is an SVM that classifies all reports classified as "Reported" by the previous reported algorithm as either "Positive" or "Negative" for each test
     (for the purposes of sensitivity/specificity metrics and for consumption by downstream algorithms, "Positive" is considered a positive classification and "Negative" a negative)
 
-* method: this is an SVM that classifies all reports classified as "Reported" by the previous reported algorithm as either the standard testing methodology or "OTHER" for each test
+* __method__: this is an SVM that classifies all reports classified as "Reported" by the previous reported algorithm as either the standard testing methodology or "OTHER" for each test
     (for the purposes of sensitivity/specificity metrics and for consumption by downstream algorithms, the standard testing methodology ("MutationalAnalysis" for EGFR and "FISH" for ALK) is considered a positive classification and "OTHER" a negative)
     
 
