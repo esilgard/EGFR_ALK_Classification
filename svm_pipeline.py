@@ -15,14 +15,14 @@ import final_output
 
 TEST_NAME = 'ALK'
 TRAIN_BATCH = 'internal_validation'
-VECTOR_FILE = TEST_NAME + '_feature_vectors.txt'
+VECTOR_FILE = 'Input' + os.sep + TEST_NAME + '_feature_vectors.txt'
 ALGORITHM_ORDER = [('reported','result'),('insufficient','result'),
     ('method','method'),('positive','result')]
 FINAL_OUTPUT_DIRECTORY = 'final_output'
 
 # initial output files for keyword rule based filter
-pos_inst = 'rule_based_reported' + os.path.sep + TEST_NAME + '_pos_instances.txt'
-neg_inst = 'rule_based_reported' + os.path.sep + TEST_NAME + '_neg_instances.txt'
+pos_inst = 'rule_based_reported' + os.sep + TEST_NAME + '_pos_instances.txt'
+neg_inst = 'rule_based_reported' + os.sep + TEST_NAME + '_neg_instances.txt'
 
 def run_pipeline():  
     '''
@@ -54,12 +54,12 @@ def run_pipeline():
         algorithm = algorithm_tuple[0]
         label = algorithm_tuple[1]
         
-        model_file = algorithm + os.path.sep + TRAIN_BATCH + '.pkl' 
-        num_features = int(open(algorithm + os.path.sep + 'num_features.txt', \
+        model_file = algorithm + os.sep + TRAIN_BATCH + '.pkl' 
+        num_features = int(open(algorithm + os.sep + 'num_features.txt', \
             'r').read().strip())
         print 'classifying with model ',model_file, '-', num_features, 'features'
         # turn text feature vector into integer array
-        vector_to_array.main(TEST_NAME, algorithm, TRAIN_BATCH)
+        vector_to_array.main(TEST_NAME, algorithm, TRAIN_BATCH, VECTOR_FILE)
         
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
