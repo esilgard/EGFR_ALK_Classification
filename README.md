@@ -21,9 +21,12 @@ method: this is an SVM that classifies all reports classified as "Reported" by t
     
 
 - make_vectors.py is a standalone script that creates individual feature vectors for each report&test instance
+    this  will need to be modified to include the name/location of the input file (now expected to be in the "Input" sub directory)
+    also the input file is expected to be a tab delimited text file, the column indices of the text, report identifiers, and accession numbers will need to be manually edited. (see TEXT_COL, REPORT_ID_COL, ACC_NUM_COL)
 
 - svm_pipeline.py is the main script to run the end to end classification pipeline
 
+Currently the vector creation and classification pipeline are run for one test at a time, the "TEST_NAME" will have to be manually edited in both make_vectors.py, as well as svm_pipeline.py
 
 
 Internal validation performance as well as a project overview is reported in the attached abstract "Validation of Natural Language Processing (NLP) for Automated Ascertainment of EGFR and ALK Tests in SEER Cases of Non-Small Cell Lung Cancer (NSCLC)"
