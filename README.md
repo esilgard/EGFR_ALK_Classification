@@ -37,4 +37,6 @@ each needs its own folder to house svm models and feature sets as well as the ou
 Currently the vector creation and classification pipeline are run for one test at a time, the "TEST_NAME" will have to be manually edited in both make_vectors.py, as well as svm_pipeline.py
 
 
-Internal validation performance as well as a project overview is reported in the attached abstract "Validation of Natural Language Processing (NLP) for Automated Ascertainment of EGFR and ALK Tests in SEER Cases of Non-Small Cell Lung Cancer (NSCLC)"
+#### The References folder containsInternal
+Internal validation performance as well as a project overview is reported in the attached abstract (microsoft word doc) "Validation of Natural Language Processing (NLP) for Automated Ascertainment of EGFR and ALK Tests in SEER Cases of Non-Small Cell Lung Cancer (NSCLC)"
+As well as classifcation_architecture.png; a visual represetation of the classification architecture
