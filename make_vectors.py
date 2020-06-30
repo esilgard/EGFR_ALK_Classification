@@ -16,19 +16,19 @@ import os, re, json
 # the pathology report accession number 
 # and the raw text of the pathology report
 # assumed to be a tab delimited file
-INSTANCES_FILE = 'Input/tester_file.txt'
+INSTANCES_FILE = 'Input/IR 10469_Path_Text_2020-06-29.txt'
 # identifiey columns for report id, accession, and report text (initial column = 0)
-TEXT_COL = 9
-REPORT_ID_COL = 3
-ACC_NUM_COL = 7
+TEXT_COL = 7
+REPORT_ID_COL = 2
+ACC_NUM_COL = 5
 
 # the test/marker to be classified - note this needs to be the standardized
-# key that is present in the "condensed_patterns.json" resource file
-TEST_NAME = 'EGFR'
+# key that is present in the "test_patterns.json" resource file
+TEST_NAME = 'ALK'
 
 # one output file per batch, per test type
 OUTPUT_FILE = 'Input' + os.sep + TEST_NAME + '_feature_vectors.txt'
-RESOURCE_DIR = 'Resources/'
+RESOURCE_DIR = 'Resources'
 STOP_LIST = '[\s\^](TO|THE|FOR|A|AN|AS|THIS|THAT|THESE|THEY|IN|OF|ON|OR|BY)( THE|A|AN)?[\s\$]'
 
 # windows dictate the number of tokens on either side of the test name
@@ -41,8 +41,6 @@ def vector_creation():
     '''
     initial/main method for vector creation
     '''  
-      
-    ##########################################################################
     def compile_patterns(pattern_dictionary, uppercase_boolean, cushion1, cushion2):
         '''
         helper method to compile patterns for each regex dictionary 
@@ -50,9 +48,10 @@ def vector_creation():
         allows for optomizing pattern matching while 
         allowing for slightly better readibility in json docs
         '''
+        compiled_d = {}
         for key, val in pattern_dictionary.items():
             compiled_patterns = []
-            key = key.replace('<newline>','\n')
+            k = key.replace('<newline>','\n')
             for each in val:
                 ## make sure match pattern is isolated from alphanumeric characters
                 compiled_patterns.append(re.compile(r'' + cushion1 + \
@@ -60,13 +59,14 @@ def vector_creation():
                 if uppercase_boolean:
                     compiled_patterns.append(re.compile(r'' + cushion1 + \
                         '('+each.upper()+')' + cushion2, re.MULTILINE))
-            pattern_dictionary[key] = compiled_patterns
-     ##########################################################################  
+                
+            compiled_d[k] = compiled_patterns
+        return compiled_d
     
     # resources needed for text standardization and feature engineering
-    test_pattern_file = RESOURCE_DIR + os.path.sep + 'condensed_patterns.json'
-    other_pattern_file = RESOURCE_DIR + os.path.sep + 'other_keyword_patterns.json'
-    section_pattern_file = RESOURCE_DIR + os.path.sep + 'section_patterns.json'
+    test_pattern_file = '{}{}{}'.format(RESOURCE_DIR, os.path.sep, 'test_patterns.json')
+    other_pattern_file = '{}{}{}'.format(RESOURCE_DIR, os.path.sep, 'other_keyword_patterns.json')
+    section_pattern_file = '{}{}{}'.format(RESOURCE_DIR, os.path.sep, 'section_patterns.json')
     
     # load json objects containing regex patterns        
     test_patterns = json.load(open(test_pattern_file,'r'))
@@ -76,14 +76,15 @@ def vector_creation():
     # here we only uppercase all patterns (based on boolean flag)
     # as long as no regex character classes are used in pattern 
     # e.g. we don't want [\w] to turn into [\W]
-    compile_patterns(test_patterns, True, '[\W\^]', '[\W$]')
-    compile_patterns(other_patterns, False, '[\W\^]', '[\W$]')
-    compile_patterns(section_patterns, True, '^', '$')
-    
+    compiled_test_patterns = compile_patterns(test_patterns, True, '[\W\^]', '[\W$]')
+    compiled_other_patterns = compile_patterns(other_patterns, False, '[\W\^]', '[\W$]')
+    compiled_section_patterns = compile_patterns(section_patterns, True, '^', '$')
+
     counter = 0
     # loop through instances
     with open(OUTPUT_FILE, 'w') as out:
-        for lines in open(INSTANCES_FILE, 'r').readlines()[1:]:
+        num_processed = 0
+        for lines in open(INSTANCES_FILE, 'r', encoding='unicode_escape').readlines()[1:]:   #, encoding='unicode_escape'
             separate_columns = lines.split('\t')
             if True:  # place holder for individual instance debugging
                 counter += 1  
@@ -92,18 +93,18 @@ def vector_creation():
                 text = separate_columns[TEXT_COL]
 
                 # seems unnecessary, but need to maintain regex behavior
-                text = text.replace('<newline>','\n')
+                text = text.replace('<newline>','\n').strip()
                 # dictionary of feature counts for models
                 vector = {} 
                 
                 # cytometry check
                 vector['CYTO_RELATED_REPORT'] = int(get_cyto(text))
                 # standardize test instance
-                text, vector = strip_test_name(test_patterns[TEST_NAME], text, \
+                text, vector = strip_test_name(compiled_test_patterns[TEST_NAME], text, \
                     vector)
                 # standardize all mentions of other test names in the text 
-                text = make_standardized_text(test_patterns, text, \
-                    other_patterns, counter, section_patterns)                
+                text = make_standardized_text(compiled_test_patterns, text, \
+                    compiled_other_patterns, counter, compiled_section_patterns)                
                 
                 ## get reference to other path accession feature
                 other_acc_num, text = get_other_acc_num(text, pathnum)
@@ -144,9 +145,14 @@ def vector_creation():
                 
                 # output feature vectors to text specific file
                 out.write(report_id)
-                for k,v in vector.items():
-                    out.write('\t'+k+'\t'+str(v))
+                try:
+                    for k,v in vector.items():
+                        out.write('\t{}\t{}'.format(k, v))
+                except:
+                    print ('{} processed {}{}'.format(num_processed, report_id,k))
+                    sys.exit()
                 out.write('\n')
+                num_processed += 1
    
 
 def strip_test_name(regex, text, vector):
@@ -202,7 +208,7 @@ def get_cyto(text):
     else:
         return False
    
-def make_standardized_text(test_patterns, text, other_patterns, counter, section_patterns):
+def make_standardized_text(compiled_test_patterns, text, compiled_other_patterns, counter, compiled_section_patterns):
     def regex_sub(regex, standardization, text):        
         for expression in regex:
             text = re.sub(expression,' ' + standardization + ' ',text)
@@ -212,12 +218,12 @@ def make_standardized_text(test_patterns, text, other_patterns, counter, section
     ## (because of [\W] buffer in pattern match)    
     for i in range(2):
         ## replace all other tests in the text    
-        for test, reg in test_patterns.items():
+        for test, reg in compiled_test_patterns.items():            
             text = regex_sub(reg, ' OTHER_TEST ' , text)
-        for section,patern in section_patterns.items():
-            text = regex_sub(patern, section, text)
+        for section, pattern in compiled_section_patterns.items():
+            text = regex_sub(pattern, section, text)
         ## replace patterns with variable standardizations
-        for standardization,regex in other_patterns.items():
+        for standardization,regex in compiled_other_patterns.items():
             text = regex_sub(regex, standardization, text)
     return text
     
@@ -306,9 +312,9 @@ def make_ngrams(text, vector):
 if __name__ == '__main__':
     ## timeit variable for performance testing ##
     BEGIN = datetime.today()
-    print 'vector creation started at', BEGIN
+    print ('vector creation started at {}'.format(BEGIN))
     vector_creation()
     ## timeit - print out the amount of time it took to process all the reports ##
-    print (datetime.today()-BEGIN).days * 86400 + \
-        (datetime.today()-BEGIN).seconds, 'seconds to create vectors'
+    print ('{} seconds to create vectors'.format((datetime.today()-BEGIN).days * 86400 + \
+        (datetime.today()-BEGIN).seconds))
 

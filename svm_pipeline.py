@@ -13,9 +13,9 @@ import decoder
 import final_output
 
 
-TEST_NAME = 'ALK'
-TRAIN_BATCH = 'internal_validation'
-VECTOR_FILE = 'Input' + os.sep + TEST_NAME + '_feature_vectors.txt'
+TEST_NAME = 'EGFR'
+TRAIN_BATCH = 'IR_10469'
+VECTOR_FILE = '{}{}{}{}'.format('Input', os.sep, TEST_NAME, '_feature_vectors.txt')
 ALGORITHM_ORDER = [('reported','result'),('insufficient','result'),
     ('method','method'),('positive','result')]
 FINAL_OUTPUT_DIRECTORY = 'final_output'
@@ -50,21 +50,22 @@ def run_pipeline():
     # loop through SVM classifiers; "positive" and "negative" instances
     # will be written to algorithm specific directories s
     # o they can be used by subsequent algorithms
-    for algorithm_tuple in ALGORITHM_ORDER:  
+    for algorithm_tuple in ALGORITHM_ORDER:
         algorithm = algorithm_tuple[0]
         label = algorithm_tuple[1]
-        
+
         model_file = algorithm + os.sep + TRAIN_BATCH + '.pkl' 
         num_features = int(open(algorithm + os.sep + 'num_features.txt', \
             'r').read().strip())
-        print 'classifying with model ',model_file, '-', num_features, 'features'
+        print ('starting model {} - {} features'.format(model_file, num_features))
         # turn text feature vector into integer array
         vector_to_array.main(TEST_NAME, algorithm, TRAIN_BATCH, VECTOR_FILE)
-        
+        print ('vector written')
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
             fxn()            
             decoder.main(num_features, model_file, algorithm, TRAIN_BATCH, TEST_NAME, label)
+            print ('instances decoded')
     final_output.output_final_class_labels(TEST_NAME, FINAL_OUTPUT_DIRECTORY)
     
 def fxn():
